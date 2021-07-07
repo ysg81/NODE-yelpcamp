@@ -24,10 +24,10 @@ app.set('views', path.join(__dirname, 'views'))
 app.get('/', (req, res) => {
   res.render('home')
 })
-app.get('/campground', async(req, res) => {
-  const camp = new Campground({title: 'My Home'});
-  await camp.save()
-  res.send(camp)
+
+app.get('/campgrounds', async(req, res) => {
+  const campgrounds = await Campground.find({})
+  res.render('campgrounds/index', {campgrounds})
 })
 
 
