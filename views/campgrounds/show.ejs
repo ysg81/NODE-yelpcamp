@@ -1,7 +1,9 @@
 <% layout('layouts/boilerplate') %> 
 <!-- 위 경로의 ejs파일을 불러오기 -->
-<h1><%= a_campground.title  %> </h1>
-<h2><%= a_campground.location  %> </h2>
+<h1><%= a_campground.title %> </h1>
+<h2><%= a_campground.location %> </h2>
+<img src="<%= a_campground.image %>" alt="<%= a_campground.image %>">
+<p><%= a_campground.description %></p>
 <p><a href="/campgrounds/<%= a_campground._id %>/edit ">Edit</a></p>
 <p>
   <form action="/campgrounds/<%= a_campground._id%>?_method=DELETE" method="POST">
