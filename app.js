@@ -2,6 +2,9 @@ const express = require('express')
 const path = require('path')
 const methodOverride = require('method-override')
 const ejsMate = require('ejs-mate')
+const Joi = require('joi')
+const {campgroundSchema} = require('./joiSchemas')
+
 const catchAsync = require('./utils/catchAsync')
 const ExpressError = require('./utils/ExpressError')
 
@@ -31,6 +34,21 @@ app.use(express.urlencoded({extended: true}))
 app.use(methodOverride('_method'))
 
 
+
+const validateCampground = (req, res, next) => {    
+  // joi 적용
+  const {error} = campgroundSchema.validate(req.body);
+  if(error){
+    const msg = error.details.map(el => el.message).join(',');
+    throw new ExpressError(msg, 400)
+  } else{
+    next()
+  }
+  // Joi 사용법
+}
+
+
+
 app.get('/', (req, res) => {
   res.render('home')
 })
@@ -44,8 +62,7 @@ app.get('/campgrounds/new', (req, res) => {
   res.render('campgrounds/new')
 })
 
-app.post('/campgrounds', catchAsync(async (req, res, next) => {
-    if(!req.body.campground) throw new ExpressError('Invalid Campground Data', 400)
+app.post('/campgrounds', validateCampground,  catchAsync(async (req, res, next) => {
     const newcampground = new Campground(req.body.campground)
     await newcampground.save();
     res.redirect(`/campgrounds/${newcampground._id}`)
@@ -61,7 +78,7 @@ app.get('/campgrounds/:id/edit', catchAsync(async(req, res) => {
   res.render('campgrounds/edit', {editcampground})
 }))
 
-app.put('/campgrounds/:id', catchAsync(async(req, res) => {
+app.put('/campgrounds/:id', validateCampground, catchAsync(async(req, res) => {
   const {id} = req.params
   const editcampground = await Campground.findByIdAndUpdate(id, {...req.body.campground})
   res.redirect(`/campgrounds/${editcampground._id}`)
