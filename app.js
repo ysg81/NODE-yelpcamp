@@ -1,3 +1,9 @@
+/******* error 생성 순서 ******* */
+/*1. app.use(err)라우터 만들기  */
+/*2. async error catch하기 */
+/*3. throw new error(class제작 가능) */
+/*4. 모든 과정을 통과할 경우 404 => app.all('*')에 대하여 */
+
 const express = require('express')
 const path = require('path')
 const methodOverride = require('method-override')
@@ -35,16 +41,17 @@ app.use(methodOverride('_method'))
 
 
 
+// Joi 사용법
 const validateCampground = (req, res, next) => {    
-  // joi 적용
+  console.log(req.body)
   const {error} = campgroundSchema.validate(req.body);
   if(error){
+    // detail의 개수가 1개 이상일 경우
     const msg = error.details.map(el => el.message).join(',');
     throw new ExpressError(msg, 400)
   } else{
     next()
   }
-  // Joi 사용법
 }
 
 
@@ -90,6 +97,7 @@ app.delete('/campgrounds/:id', catchAsync(async(req, res) => {
   res.redirect('/campgrounds')
 }))
 
+// 모든 path를 통과하고, 주어진 모든 err를 건너뛰고 err가 발생할 경우
 app.all('*', (req, res, next) => {
   next(new ExpressError('Page Not Found', 404))
 })
