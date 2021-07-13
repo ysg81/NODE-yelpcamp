@@ -88,7 +88,8 @@ app.post('/campgrounds', validateCampground, catchAsync(async (req, res, next) =
 }))
 
 app.get('/campgrounds/:id', catchAsync(async(req, res) => {
-  const a_campground = await Campground.findById(req.params.id)
+  const a_campground = await Campground.findById(req.params.id).populate('reviews')
+  console.log(a_campground)
   res.render('campgrounds/show', {a_campground})
 }))
 
@@ -122,6 +123,14 @@ app.post('/campgrounds/:id/reviews', validateRivew, catchAsync(async(req, res, n
   res.redirect(`/campgrounds/${campground._id}`)
 }))
 
+app.delete('/campgrounds/:id/reviews/:reviewId', catchAsync(async(req, res) => {
+  const {id, reviewId} = req.params;
+  /********not*********/
+  await Review.findByIdAndDelete(reviewId);
+  await Campground.findByIdAndUpdate(id, {$pull: { reviews: reviewId }})
+  /********not*********/
+  res.redirect(`/campgrounds/${id}`)
+}))
 
 // 모든 path를 통과하고, 주어진 모든 err를 건너뛰고 err가 발생할 경우
 app.all('*', (req, res, next) => {
