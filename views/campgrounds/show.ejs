@@ -1,8 +1,8 @@
 <% layout('layouts/boilerplate') %> 
 <!-- 위 경로의 ejs파일을 불러오기 -->
 <div class="row">
-  <div class="col-6 offset-3">
-    <div class="card">
+  <div class="col-6">
+    <div class="card mb-3">
       <img class="card-image-top" src="<%= a_campground.image %>" alt="<%= a_campground.image %>">
       <div class="card-body">
         <h5 class="card-title"><%= a_campground.title %></h5>
@@ -22,5 +22,38 @@
         <a href="/campgrounds">Back</a>
       </div>
     </div>
+
   </div>
+
+  <div class="col-6">
+    <h2>Leave a Review</h2>
+    <form action="/campgrounds/<%= a_campground._id %>/reviews" method="POST" novalidate class="validated-form mb-4">
+      <div class="mb-3">
+        <label class="form-label" for="rating">Rating</label>
+        <input class="form-range" name="review[rating]" id="rating" type="range" min="1" max="5">
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="body">Review:</label>
+        <textarea class="form-control" name="review[body]" id="body" cols="30" rows="5" required></textarea>
+        <div class="valid-feedback">
+          Thank you for your review!
+        </div>
+      </div>
+      <button class="btn btn-success">Submit</button>
+    </form>
+
+
+    <% for(let review of a_campground.reviews) {%> 
+      <div class="card mb-3">
+        <div class="card-body">
+          <h5>Rating: <%= review.rating %> </h5>
+          <p>Review: <%= review.body %> </p>
+          <form action="/campgrounds/<%= a_campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
+            <button class="btn-sm btn-danger">Delete</button>
+          </form>
+        </div>
+      </div>
+    <% } %> 
+  </div>
+
 </div>
