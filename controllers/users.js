@@ -25,7 +25,7 @@ module.exports.renderLogin = (req,res) => {
   res.render('users/login')
 }
 
-module.exports.userLogin = async(req,res) => {
+module.exports.loginUser = async(req,res) => {
   req.flash('success', 'Welcome back!')
   res.redirect('/campgrounds')
 }
