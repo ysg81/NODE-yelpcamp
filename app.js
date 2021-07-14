@@ -4,14 +4,6 @@
 /*3. throw new error(class제작 가능) */
 /*4. 모든 과정을 통과할 경우 404 => app.all('*')에 대하여 */
 
-/*중복 제거*/
-// const Joi = require('joi')
-// const catchAsync = require('./utils/catchAsync')
-// const Campground = require('./models/campground')
-// const Review = require('./models/review')
-// const {campgroundSchema, reviewSchema} = require('./joiSchemas')
-
-
 const express = require('express')
 const path = require('path')
 const methodOverride = require('method-override')
@@ -20,7 +12,6 @@ const session = require('express-session')
 const flash = require('connect-flash')
 const passport = require('passport')
 const LocalStrategy = require('passport-local')
-
 
 const ExpressError = require('./utils/ExpressError')
 
