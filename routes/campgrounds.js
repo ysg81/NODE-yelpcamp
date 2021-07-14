@@ -32,31 +32,62 @@ router.get('/new', (req, res) => {
 })
 
 router.post('/', validateCampground, catchAsync(async (req, res, next) => {
-    const newcampground = new Campground(req.body.campground)
-    await newcampground.save();
-    res.redirect(`/campgrounds/${newcampground._id}`)
+  const newcampground = new Campground(req.body.campground)
+  await newcampground.save();
+
+  /***** flash part *****/
+  req.flash('success', 'Successfully made a campground!')
+  /***** flash part *****/
+
+  res.redirect(`/campgrounds/${newcampground._id}`)
+
 }))
 
 router.get('/:id', catchAsync(async(req, res) => {
   const a_campground = await Campground.findById(req.params.id).populate('reviews')
-  console.log(a_campground)
+  
+  /***** flash part *****/
+  if(!a_campground){
+    req.flash('error', 'Cannot find that campground!')
+    return res.redirect('/campgrounds')
+  }
+  /***** flash part *****/
+
   res.render('campgrounds/show', {a_campground})
 }))
 
 router.get('/:id/edit', catchAsync(async(req, res) => {
   const editcampground = await Campground.findById(req.params.id)
+
+  /***** flash part *****/
+  if(!editcampground){
+    req.flash('error', 'Cannot find that campground!')
+    return res.redirect('/campgrounds')
+  }
+  /***** flash part *****/
+
   res.render('campgrounds/edit', {editcampground})
 }))
 
-router.put('/:id', catchAsync(async(req, res) => {
+router.put('/:id', validateCampground, catchAsync(async(req, res, next) => {
   const {id} = req.params
   const editcampground = await Campground.findByIdAndUpdate(id, {...req.body.campground})
+
+  /***** flash part *****/
+  req.flash('success', 'Successfully updated a campground!')
+  /***** flash part *****/
+
   res.redirect(`/campgrounds/${editcampground._id}`)
 }))
 
 router.delete('/:id', catchAsync(async(req, res) => {
   const {id} = req.params
   await Campground.findByIdAndDelete(id)
+
+  /***** flash part *****/
+  req.flash('success', 'Successfully deleted a campground!')
+  /***** flash part *****/
+  
   res.redirect('/campgrounds')
 }))
 
