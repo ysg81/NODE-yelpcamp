@@ -4,6 +4,12 @@
 /*3. throw new error(class제작 가능) */
 /*4. 모든 과정을 통과할 경우 404 => app.all('*')에 대하여 */
 
+if(process.env.NODE_ENV !== "production"){
+  require('dotenv').config()
+}
+
+
+
 const express = require('express')
 const path = require('path')
 const methodOverride = require('method-override')
@@ -43,6 +49,11 @@ app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 
+if(process.env.NODE_ENV !== "production"){
+  require('dotenv').config()
+}
+
+console.log(process.env.SECRET)
 
 app.use(express.urlencoded({extended: true}))
 app.use(methodOverride('_method'))
