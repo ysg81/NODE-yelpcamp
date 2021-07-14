@@ -9,15 +9,18 @@
         <p class="card-text"><%= a_campground.description %></p>
       </div>
       <ul class="list-group list-group-flush">
-        <li class="list-group-item text-muted"><%= a_campground.location %></li>
+        <li class="list-group-item"><%= a_campground.location %></li>
+        <li class="list-group-item text-muted">Submitted by <%= a_campground.author.username %> </li>
         <li class="list-group-item">₩<%= a_campground.price %>/night</li>
       </ul>
+      <% if(currentUser && a_campground.author.equals(currentUser._id)) {%> 
       <div class="card-body d-flex">
         <a href="/campgrounds/<%= a_campground._id %>/edit" class="card-link btn btn-warning" style="display: inline-block; margin-right: 20px;">Edit</a>
         <form action="/campgrounds/<%= a_campground._id%>?_method=DELETE" method="POST">
           <button class="btn btn-danger">Delete</button>
         </form>
       </div>
+      <% } %> 
       <div class="card-footer text-muted">
         <a href="/campgrounds">Back</a>
       </div>
@@ -26,6 +29,7 @@
   </div>
 
   <div class="col-6">
+    <% if(currentUser) {%> 
     <h2>Leave a Review</h2>
     <form action="/campgrounds/<%= a_campground._id %>/reviews" method="POST" novalidate class="validated-form mb-4">
       <div class="mb-3">
@@ -41,19 +45,23 @@
       </div>
       <button class="btn btn-success">Submit</button>
     </form>
-
+    <% } %> 
 
     <% for(let review of a_campground.reviews) {%> 
       <div class="card mb-3">
         <div class="card-body">
-          <h5>Rating: <%= review.rating %> </h5>
-          <p>Review: <%= review.body %> </p>
+          <h5 class="card-title">Rating: <%= review.rating %> </h5>
+          <h6 class="card-subtitle mb-2 text-muted">By <%= review.author.username %> </h6>
+          <p class="card-text">Review: <%= review.body %> </p>
+          <% if(currentUser && review.author.equals(currentUser._id)) {%> 
           <form action="/campgrounds/<%= a_campground._id%>/reviews/<%=review._id%>?_method=DELETE" method="POST">
             <button class="btn-sm btn-danger">Delete</button>
           </form>
+          <% } %> 
         </div>
       </div>
     <% } %> 
+
   </div>
 
 </div>

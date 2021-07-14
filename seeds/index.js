@@ -18,11 +18,12 @@ db.once("open", () => {
 const sample = arr => arr[Math.floor(Math.random() * arr.length)]
 
 const seedDb = async() => {
-  const sampleidx = 100
+  const sampleidx = 10
   await Campground.deleteMany({});
   for(let i = 0; i < sampleidx; i++){
     const price = Math.floor(Math.random() * 80) * 1000 + 10000;
     const seedcamp = new Campground({
+      author: '60eea1b23ed66a18a0173098',
       location: `${sample(citiesinfo).city}, ${sample(citiesinfo).state}`,
       title: `${sample(descriptors)} ${sample(places)}`,
       image: 'https://source.unsplash.com/collection/483251',
