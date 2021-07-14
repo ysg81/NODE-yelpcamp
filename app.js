@@ -81,15 +81,10 @@ passport.deserializeUser(User.deserializeUser())
 
 // flash middleware 생성
 app.use((req, res, next) => {
+  res.locals.currentUser = req.user
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
   next()
-})
-
-app.get('/fake', async(req,res) => {
-  const user = new User({email: 'ysg123@naver.com', username:'ysg'})
-  const newUser = await User.register(user, 'hello')
-  res.send(newUser)
 })
 
 // campground router 분리

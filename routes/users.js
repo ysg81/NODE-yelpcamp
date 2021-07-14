@@ -11,14 +11,16 @@ router.get('/register', (req, res) => {
   res.render('users/register')
 })
 
-router.post('/register', catchAsync(async(req, res) => {
+router.post('/register', catchAsync(async(req, res, next) => {
   try{
     const {username, email, password} = req.body
     const user = new User({username, email})
     const registeredUser = await User.register(user, password)
-    console.log(registeredUser)
-    req.flash('success', 'Welcome to Yelp Camp!')
-    res.redirect('/campgrounds')
+    req.login(registeredUser, err => {
+      if(err) return next(err)
+      req.flash('success', 'Welcome to Yelp Camp!')
+      res.redirect('/campgrounds')
+    })
   }
   catch(err){
     req.flash('error', err.message)
@@ -33,8 +35,13 @@ router.get('/login', (req,res) => {
 router.post('/login', passport.authenticate('local', {failureFlash: true, failureRedirect: '/login'}), catchAsync(async(req,res) => {
   req.flash('success', 'Welcome back!')
   res.redirect('/campgrounds')
-
 }))
+
+router.get('/logout', (req, res) => {
+  req.logout();
+  req.flash('success', "Goodbye!")
+  res.redirect('/campgrounds')
+})
 
 
 module.exports = router
