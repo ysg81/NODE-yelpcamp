@@ -15,11 +15,9 @@ module.exports.createReview = async(req, res, next) => {
   // 4. 저장
   await review.save()
   await campground.save()
-
   /***** flash part *****/
   req.flash('success', 'Successfully create a review!')
   /***** flash part *****/
-
   res.redirect(`/campgrounds/${campground._id}`)
 }
 
@@ -29,10 +27,8 @@ module.exports.deleteReview = async(req, res) => {
   await Review.findByIdAndDelete(reviewId);
   await Campground.findByIdAndUpdate(id, {$pull: { reviews: reviewId }})
   /********not*********/
-
   /***** flash part *****/
   req.flash('success', 'Successfully deleted a review!')
   /***** flash part *****/
-
   res.redirect(`/campgrounds/${id}`)
 }
