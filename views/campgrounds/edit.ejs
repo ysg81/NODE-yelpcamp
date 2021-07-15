@@ -3,7 +3,7 @@
 <div class="row">
   <h1 class="text-center">Edit Campground</h1>
   <div class="col-6 offset-3">
-    <form action="/campgrounds/<%= editcampground._id %>?_method=PUT" method="POST" novalidate class="validated-form">
+    <form action="/campgrounds/<%= editcampground._id %>?_method=PUT" method="POST" novalidate class="validated-form" enctype="multipart/form-data">
       <div class="mb-4">
         <label class="form-label" for="title">Title</label>
         <input class="form-control" type="text" id="title" name="campground[title]" value="<%= editcampground.title %>" required>
@@ -14,13 +14,6 @@
       <div class="mb-4">
         <label class="form-label" for="location">Location</label>
         <input class="form-control" type="text" id="location" name="campground[location]" value="<%= editcampground.location %>" required>
-        <div class="valid-feedback">
-          Looks good!
-        </div>
-      </div>
-      <div class="mb-4">
-        <label class="form-label" for="image">Image Url</label>
-        <input class="form-control" type="text" id="image" name="campground[image]" value="<%= editcampground.image %>" required>
         <div class="valid-feedback">
           Looks good!
         </div>
@@ -41,6 +34,21 @@
         <div class="valid-feedback">
           Looks good!
         </div>
+      </div>
+      <div class="mb-4">
+        <label for="image" class="form-label">Edit Images</label>
+        <input class="form-control" type="file" id="image" name="image" multiple>
+      </div>
+      <div class="mb-3">
+        <% editcampground.images.forEach((img, idx) => { %>
+          <div class="mb-4">
+            <div class="form-check-inline">
+              <input type="checkbox" id="image-<%= idx %>" name="deleteImages[]" value="<%= img.filename %>">
+            </div>
+            <label for="image-<%= idx %>">Delete</label>
+            <img src="<%= img.thumbnail %>" class="img-thumbnail" alt="<%= img.filename %>" >
+          </div>
+        <% }) %> 
       </div>
       <div class="mb-4">
         <button class="btn btn-primary">Save</button>
