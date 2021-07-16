@@ -20,8 +20,8 @@ body{
 .nav-link:hover{
   color: white;
   border-bottom: 2px solid white;
-  border-width: 60%;
-  width: 60%;
+  /* border-width: 60%; */
+  /* width: 60%; */
 }
 
 .lead{
