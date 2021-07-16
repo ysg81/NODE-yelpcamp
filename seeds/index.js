@@ -18,7 +18,7 @@ db.once("open", () => {
 const sample = arr => arr[Math.floor(Math.random() * arr.length)]
 
 const seedDb = async() => {
-  const sampleidx = 2
+  const sampleidx = 80
   await Campground.deleteMany({});
   for(let i = 0; i < sampleidx; i++){
     const price = Math.floor(Math.random() * 80) * 1000 + 10000;
