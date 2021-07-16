@@ -22,13 +22,17 @@ const ExpressError = require('./utils/ExpressError')
 // mongoose model
 const mongoose = require('mongoose')
 const User = require('./models/user')
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/yelp-camp';
+// const dbUrl = 'mongodb://localhost:27017/yelp-camp'
+const MongoDBStore = require('connect-mongo')(session)
 
 // router
 const campgroundRoutes = require('./routes/campgrounds')
 const reviewRoutes = require('./routes/reviews')
 const userRoutes = require('./routes/users')
 
-mongoose.connect('mongodb://localhost:27017/yelp-camp', {
+
+mongoose.connect(dbUrl, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
@@ -47,19 +51,27 @@ app.engine('ejs', ejsMate)
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'))
 
-if(process.env.NODE_ENV !== "production"){
-  require('dotenv').config()
-}
-
-console.log(process.env.SECRET)
 
 app.use(express.urlencoded({extended: true}))
 app.use(methodOverride('_method'))
 app.use(express.static(path.join(__dirname, 'public')))
 
+const secrte = process.env.SECRET || 'thisissecret!';
+
+const store = new MongoDBStore({
+  url: dbUrl,
+  secret: secrte,
+  touchAfter: 24 * 60 * 60
+})
+
+store.on("error", function(e){
+  console.log("SESSION STORE ERROR", e)
+})
+
 // // session 정보
 const sessionConfig = {
-  secret: 'however',
+  store: store,
+  secret: secrte,
   resave : false,
   saveUninitialized: true,
   cookie: {
@@ -107,6 +119,7 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render('error', { err })
 })
 
-app.listen(3000, () => {
-  console.log('Serving on port 3000')
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+  console.log(`Serving on port ${port}`)
 })

@@ -1,26 +1,32 @@
 <% layout('layouts/boilerplate') %>
-<h1>Login</h1>
-<form action="/login" method="POST" novalidate class="validated-form">
-  <div class="mb-4">
-    <label class="form-label" for="username">Username</label>
-    <input class="form-control" type="text" id="username" name="username" required>
-    <div class="valid-feedback">
-      Looks good!
+<div class="d-flex justify-content-center align-items-center">
+
+  <div class="card" style="width: 24rem;">
+    <img src="/stylesheets/tent.jpg" class="card-img-top" alt="...">
+    <div class="card-body shadow">
+
+      <h5 class="card-title">Login</h5>
+
+      <p class="card-text">
+        <form action="/login" method="POST" novalidate class="validated-form">
+          <div class="mb-4">
+            <label class="form-label" for="username">Username</label>
+            <input class="form-control" type="text" id="username" name="username" required>
+            <div class="valid-feedback">
+              Looks good!
+            </div>
+          </div>
+        
+          <div class="mb-4">
+            <label class="form-label" for="password">Password</label>
+            <input class="form-control" type="password" id="password" name="password" required>
+            <div class="valid-feedback">
+              Looks good!
+            </div>
+          </div>
+          <button class="btn btn-success form-control">Login</button>
+        </form> 
+      </p>
     </div>
   </div>
-  <!-- <div class="mb-4">
-    <label class="form-label" for="email">Email</label>
-    <input class="form-control" type="text" id="email" name="email" required>
-    <div class="valid-feedback">
-      Looks good!
-    </div>
-  </div> -->
-  <div class="mb-4">
-    <label class="form-label" for="password">Password</label>
-    <input class="form-control" type="password" id="password" name="password" required>
-    <div class="valid-feedback">
-      Looks good!
-    </div>
-  </div>
-  <button class="btn btn-success">Login</button>
-</form> 
+</div>
